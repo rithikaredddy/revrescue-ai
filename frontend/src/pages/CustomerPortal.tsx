@@ -4,14 +4,14 @@ export default function CustomerPortal() {
   const [lang, setLang] = useState('EN');
   
   const fetchData = async () => { 
-    const r = await fetch('http://localhost:5005/api/customer/portal', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}); 
+    const r = await fetch('https://revrescue-ai.onrender.com/api/customer/portal', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}); 
     const d = await r.json(); 
     setInvoices(d.invoices); 
   };
   useEffect(() => { fetchData(); }, []);
   
   const pay = async (id: string) => { 
-    await fetch(`http://localhost:5005/api/customer/pay/${id}`, { method: 'POST', headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}); 
+    await fetch(`https://revrescue-ai.onrender.com/api/customer/pay/${id}`, { method: 'POST', headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}); 
     fetchData(); 
   };
 

@@ -4,7 +4,7 @@ export default function MerchantDash() {
   const [wowState, setWowState] = useState<string | null>(null);
 
   const fetchData = async () => { 
-    const r = await fetch('http://localhost:5005/api/merchant/dashboard', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}); 
+    const r = await fetch('https://revrescue-ai.onrender.com/api/merchant/dashboard', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}); 
     setData(await r.json()); 
   };
   useEffect(() => { fetchData(); }, []);
@@ -19,7 +19,7 @@ export default function MerchantDash() {
     setWowState('STRATEGY SELECTED'); await new Promise(r => setTimeout(r, 600));
     setWowState('POLICY APPROVED'); await new Promise(r => setTimeout(r, 600));
     
-    await fetch('http://localhost:5005/api/webhook/simulate', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` }, body: JSON.stringify({ eventId: `evt_${Date.now()}`, errorType: 'INSUFFICIENT_FUNDS', amount: 2999 }) });
+    await fetch('https://revrescue-ai.onrender.com/api/webhook/simulate', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` }, body: JSON.stringify({ eventId: `evt_${Date.now()}`, errorType: 'INSUFFICIENT_FUNDS', amount: 2999 }) });
     
     setWowState('RECOVERY EXECUTED'); await new Promise(r => setTimeout(r, 800));
     await fetchData(); 

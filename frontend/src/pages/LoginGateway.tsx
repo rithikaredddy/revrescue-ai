@@ -7,7 +7,7 @@ export default function LoginGateway() {
   const handleLogin = async (e: any) => {
     e.preventDefault(); setError('');
     try {
-      const res = await fetch('http://localhost:5005/api/auth/login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, password}) });
+      const res = await fetch('https://revrescue-ai.onrender.com/api/auth/login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, password}) });
       const data = await res.json();
       if(!res.ok) throw new Error(data.error || 'Login failed');
       localStorage.setItem('token', data.token); 

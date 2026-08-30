@@ -5,7 +5,7 @@ export default function RecoveryLab() {
   
   const runSim = async () => {
     setLoading(true);
-    const r = await fetch('http://localhost:5005/api/merchant/lab', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` }, body: JSON.stringify({ batchSize }) });
+    const r = await fetch('https://revrescue-ai.onrender.com/api/merchant/lab', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` }, body: JSON.stringify({ batchSize }) });
     setResult(await r.json()); setLoading(false);
   };
 
