@@ -1,0 +1,74 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("CUSTOMER")
+  ltv       Float    @default(0.0)
+  invoices  Invoice[]
+  policies  MerchantPolicy[]
+}
+
+model Invoice {
+  id                String   @id @default(uuid())
+  invoiceNumber     String   @unique
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  amount            Float
+  status            String   @default("FAILED") // FAILED, RECOVERED, CHURNED
+  failureReason     String
+  gatewayErrorCode  String
+  retryCount        Int      @default(0)
+  recoveredAt       DateTime?
+  
+  // Risk & Economics Engine
+  revenueRiskScore  Float    @default(0.0)
+  churnProb         Float    @default(0.0)
+  recoveryProb      Float    @default(0.0)
+  expectedRecovery  Float    @default(0.0)
+  interventionCost  Float    @default(0.0)
+  discountCost      Float    @default(0.0)
+  expectedNet       Float    @default(0.0)
+  
+  // AI Agent & Timeline
+  aiStrategy        String?  // JSON
+  policyStatus      String?  
+  timeline          String?  // JSON Array of timeline events
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  auditLogs         AuditLog[]
+}
+
+model WebhookEvent {
+  id          String   @id
+  processedAt DateTime @default(now())
+}
+
+model MerchantPolicy {
+  id               String  @id @default(uuid())
+  merchantId       String
+  merchant         User    @relation(fields: [merchantId], references: [id])
+  maxRetries       Int     @default(3)
+  maxDiscount      Float   @default(5.0)
+  minRecoveryProb  Float   @default(60.0)
+  autopilotEnabled Boolean @default(true)
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+  action    String
+  reason    String
+  status    String   
+  timestamp DateTime @default(now())
+}
